@@ -5,11 +5,10 @@ import io from 'socket.io-client'
 import { ToastContainer } from 'react-toastify'
 import Loader from './components/game/Loader'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { auth, db } from './firebase'
-import { doc, updateDoc } from 'firebase/firestore'
+import { auth } from './firebase'
 import "react-toastify/dist/ReactToastify.css";
 
-const socket = io.connect("https://zum-multiplayer-rps.onrender.com")
+const socket = io.connect("https://zum-multiplayer-rps.onrender.com/")
 
 const Main = lazy(() => import('./pages/Main').then(module => ({ default: module.Main })))
 const CreateRoom = lazy(() => import('./pages/CreateRoom').then(module => ({ default: module.CreateRoom })))

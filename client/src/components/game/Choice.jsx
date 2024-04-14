@@ -36,6 +36,8 @@ const Choice = props => {
     const [result, setResult] = useState("")
 
     useEffect(() => {
+        let tempYour = yourPoints
+        let tempOpp = opponentPoints
         if (yourChoice && opponentChoice) {
             setReady(true)
             switch (yourChoice) {
@@ -45,9 +47,11 @@ const Choice = props => {
                     } else if (opponentChoice === "rock") {
                         setResult("You Win")
                         setYourPoints(Number(yourPoints) + 1)
+                        ++tempYour
                     } else {
                         setResult("You Lose")
                         setOpponentPoints(opponentPoints + 1)
+                        ++tempOpp
                     }
                     break;
 
@@ -57,9 +61,11 @@ const Choice = props => {
                     } else if (opponentChoice === "scissors") {
                         setResult("You Win")
                         setYourPoints(Number(yourPoints) + 1)
+                        ++tempYour
                     } else {
                         setResult("You Lose")
                         setOpponentPoints(Number(opponentPoints) + 1)
+                        ++tempOpp
                     }
                     break;
 
@@ -69,9 +75,11 @@ const Choice = props => {
                     } else if (opponentChoice === "paper") {
                         setResult("You Win")
                         setYourPoints(Number(yourPoints) + 1)
+                        ++tempYour
                     } else {
                         setResult("You Lose")
                         setOpponentPoints(Number(opponentPoints) + 1)
+                        ++tempOpp
                     }
                     break;
             }
@@ -82,11 +90,13 @@ const Choice = props => {
                 setReady(false)
                 setResult("")
                 setRound(round + 1)
+                console.log("YOU: " + tempYour)
+                console.log("OPPONENT: " + tempOpp)
 
-                if (yourPoints >= 3 || opponentPoints >= 3) {
+                if (tempYour >= 3 || tempOpp >= 3) {
                     setGameFinish(true)
                     clearTimeout(timeout)
-                    if (yourPoints >= 3) {
+                    if (tempYour >= 3) {
                         setOutcome("You Win")
                         setRpsWins(Number(rpsWins) + 1)
                         if (user) {

@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { Context } from '../context'
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { signInWithPopup } from 'firebase/auth'
 import { auth, provider, db } from '../firebase'
@@ -20,7 +20,7 @@ export const Main = () => {
                     await updateDoc(docRef, {
                         wins: Number(rpsWins) + docSnap.data().wins
                     })
-                    setRpsWins(Number(rpsWins) + docSnap.data().wins)
+                    setRpsWins(docSnap.data().wins)
                 } else {
                     await setDoc(docRef, {
                         wins: Number(rpsWins)
@@ -33,6 +33,18 @@ export const Main = () => {
     const signOut = () => {
         auth.signOut().then(() => setRpsWins(0))
     }
+
+    const getUserWins = async () => {
+        let docRef = doc(db, "mp-rps-users", auth.currentUser.email)
+        const docSnap = await getDoc(docRef)
+        setRpsWins(docSnap.data().wins)
+    }
+
+    useEffect(() => {
+        if (user) {
+            getUserWins()
+        }
+    }, [user])
 
     const validateUsername = () => {
         if (username.trim() === "") {

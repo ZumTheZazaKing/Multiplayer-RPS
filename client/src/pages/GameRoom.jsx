@@ -128,9 +128,9 @@ export const GameRoom = () => {
                         <table className="mx-auto text-lg">
                             <tbody>
                                 <tr>
-                                    <td className="font-bold">{username}</td>
+                                    <td className="font-bold min-w-[100px]">{username}</td>
                                     <td>:</td>
-                                    <td>{opponent}</td>
+                                    <td className="min-w-[100px]">{opponent}</td>
                                 </tr>
                                 <tr>
                                     <td className="font-bold">{yourPoints}</td>
