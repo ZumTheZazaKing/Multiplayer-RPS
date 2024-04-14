@@ -9,7 +9,7 @@ import { auth, db } from './firebase'
 import { doc, updateDoc } from 'firebase/firestore'
 import "react-toastify/dist/ReactToastify.css";
 
-const socket = io.connect("http://localhost:3001")
+const socket = io.connect("https://zum-multiplayer-rps.onrender.com:3001")
 
 const Main = lazy(() => import('./pages/Main').then(module => ({ default: module.Main })))
 const CreateRoom = lazy(() => import('./pages/CreateRoom').then(module => ({ default: module.CreateRoom })))
