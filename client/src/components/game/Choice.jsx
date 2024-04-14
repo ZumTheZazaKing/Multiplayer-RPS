@@ -4,6 +4,8 @@ import Scissors from '../../assets/scissors.png'
 import Paper from '../../assets/paper.png'
 import { useState, useContext, useEffect } from 'react';
 import { Context } from '../../context';
+import { updateDoc, doc } from 'firebase/firestore';
+import { db, auth } from '../../firebase';
 
 const Choice = props => {
 
@@ -23,9 +25,11 @@ const Choice = props => {
         username,
         opponent,
         setGameFinish,
-        setOutcome
+        setOutcome,
+        rpsWins,
+        setRpsWins
     } = props
-    const { socket } = useContext(Context)
+    const { socket, user } = useContext(Context)
 
     const [choice, setChoice] = useState("")
     const [ready, setReady] = useState(false)
@@ -40,7 +44,7 @@ const Choice = props => {
                         setResult("Tie")
                     } else if (opponentChoice === "rock") {
                         setResult("You Win")
-                        setYourPoints(yourPoints + 1)
+                        setYourPoints(Number(yourPoints) + 1)
                     } else {
                         setResult("You Lose")
                         setOpponentPoints(opponentPoints + 1)
@@ -52,10 +56,10 @@ const Choice = props => {
                         setResult("Tie")
                     } else if (opponentChoice === "scissors") {
                         setResult("You Win")
-                        setYourPoints(yourPoints + 1)
+                        setYourPoints(Number(yourPoints) + 1)
                     } else {
                         setResult("You Lose")
-                        setOpponentPoints(opponentPoints + 1)
+                        setOpponentPoints(Number(opponentPoints) + 1)
                     }
                     break;
 
@@ -64,14 +68,14 @@ const Choice = props => {
                         setResult("Tie")
                     } else if (opponentChoice === "paper") {
                         setResult("You Win")
-                        setYourPoints(yourPoints + 1)
+                        setYourPoints(Number(yourPoints) + 1)
                     } else {
                         setResult("You Lose")
-                        setOpponentPoints(opponentPoints + 1)
+                        setOpponentPoints(Number(opponentPoints) + 1)
                     }
                     break;
             }
-            const timeout = setTimeout(() => {
+            const timeout = setTimeout(async () => {
                 setChoice("")
                 setYourChoice("")
                 setOpponentChoice("")
@@ -83,6 +87,12 @@ const Choice = props => {
                     clearTimeout(timeout)
                     if (yourPoints + 1 >= 3) {
                         setOutcome("You Win")
+                        setRpsWins(Number(rpsWins) + 1)
+                        if (user) {
+                            await updateDoc(doc(db, "mp-rps-users", auth.currentUser.email), {
+                                wins: Number(rpsWins) + 1
+                            })
+                        }
                     } else {
                         setOutcome("You Lose")
                     }

@@ -8,7 +8,7 @@ export const GameRoom = () => {
 
     const navigate = useNavigate()
 
-    const { socket, username } = useContext(Context)
+    const { socket, username, rpsWins, setRpsWins } = useContext(Context)
     const [room, setRoom] = useState({ name: "", id: "" })
     const [opponent, setOpponent] = useState("")
     const [waiting, setWaiting] = useState(true)
@@ -86,7 +86,6 @@ export const GameRoom = () => {
                     {waiting ?
                         <div>
                             <h1 className="text-2xl font-bold text-center">{room.name}</h1>
-                            <h2 className="text-slate-500 text-sm text-center">{room.id}</h2>
                         </div>
                         : ""}
                     {waiting ?
@@ -120,6 +119,8 @@ export const GameRoom = () => {
                         opponent={opponent}
                         setGameFinish={setGameFinish}
                         setOutcome={setOutcome}
+                        rpsWins={rpsWins}
+                        setRpsWins={setRpsWins}
                     />
                     :
                     <div className="space-y-4 text-center">

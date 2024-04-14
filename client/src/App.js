@@ -1,9 +1,12 @@
-import { lazy, Suspense, useMemo, useState } from 'react'
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom'
 import { Context } from './context'
 import io from 'socket.io-client'
 import { ToastContainer } from 'react-toastify'
 import Loader from './components/game/Loader'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { auth, db } from './firebase'
+import { doc, updateDoc } from 'firebase/firestore'
 import "react-toastify/dist/ReactToastify.css";
 
 const socket = io.connect("http://localhost:3001")
@@ -15,13 +18,28 @@ const JoinRoom = lazy(() => import('./pages/JoinRoom').then(module => ({ default
 
 function App() {
 
+  const [user] = useAuthState(auth)
+
   const [username, setUsername] = useState("")
+  const [rpsWins, setRpsWins] = useState(user ? 0 : localStorage.getItem("zum_rps_wins") || 0)
+
+  useEffect(() => {
+    if (!user) {
+      localStorage.setItem("zum_rps_wins", rpsWins)
+    } else {
+      localStorage.setItem("zum_rps_wins", 0)
+    }
+  }, [rpsWins, user])
 
   const memo = useMemo(() => ({
     socket,
     username,
-    setUsername
-  }), [socket, username])
+    setUsername,
+    rpsWins,
+    setRpsWins,
+    user,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }), [socket, username, rpsWins, user])
 
   return (
     <Router>
