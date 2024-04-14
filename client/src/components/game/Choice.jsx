@@ -82,10 +82,11 @@ const Choice = props => {
                 setReady(false)
                 setResult("")
                 setRound(round + 1)
-                if (yourPoints + 1 >= 3 || opponentPoints + 1 >= 3) {
+
+                if (yourPoints >= 3 || opponentPoints >= 3) {
                     setGameFinish(true)
                     clearTimeout(timeout)
-                    if (yourPoints + 1 >= 3) {
+                    if (yourPoints >= 3) {
                         setOutcome("You Win")
                         setRpsWins(Number(rpsWins) + 1)
                         if (user) {
